@@ -7,7 +7,7 @@ S.M.A.R.T. items description copied from Wikipedia (https://en.wikipedia.org/wik
 Installation
 ------------
 
-Install jq:
+Install smartctl:
       sudo apt install smartmontools
 
 Copy the scripts, zabbix_agentd.conf.d into /etc/zabbix/
