@@ -5,7 +5,7 @@
 # Example2: smartctl-disks.sh sda sat
 #
 # 20171130 v1.0 stas630
-# sudo apt-get install smartmontools
+# sudo apt-get install smartmontools zabbix-sender
 #
 ZBX_CONFIG_AGENT="/etc/zabbix/zabbix_agentd.conf"
 # Uncomment if need log

@@ -8,7 +8,7 @@ Installation
 ------------
 
 Install smartctl:
-      sudo apt install smartmontools
+      sudo apt install smartmontools zabbix-sender
 
 Copy the scripts, zabbix_agentd.conf.d into /etc/zabbix/
 
