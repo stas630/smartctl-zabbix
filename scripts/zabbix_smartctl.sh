@@ -25,7 +25,7 @@ DEV_LIST="/etc/zabbix/smartctl-devices.json"
 
 ZBX_CONFIG_AGENT="/etc/zabbix/zabbix_agentd.conf"
 
-# Monitoring martmontools fields
+# Monitoring smartmontools fields
 INFO_FIELDS=";Model Family;Device Model;Serial Number;Firmware Version;User Capacity;Sector Size;Rotation Rate;"
 ATTR_FIELDS=";1;3;4;5;7;9;10;11;12;177;190;192;193;194;196;197;198;199;200;233;241;242;"
 
