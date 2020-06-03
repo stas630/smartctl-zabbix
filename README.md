@@ -24,6 +24,9 @@ $ cd archlinux
 $ makepkg -s
 ```
 
+Configuration
+-------------
+
 This template uses active checks, so you'll need to make some changes
 to `/etc/zabbix/zabbix_agentd.conf`. Edit them to match your configuration:
 
