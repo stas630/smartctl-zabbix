@@ -4,22 +4,30 @@
 # Example1: smartctl-disks.sh
 # Example2: smartctl-disks.sh sda sat
 #
+# Package Dependencies:
+# sudo apt-get install smartmontools zabbix-sender
+#
 # 20171130 v1.0 stas630
-# sudo apt-get install smartmontools
 #
 # 20180214 jsk
 # - support for static cciss,* devices
 # - "static" device discovery from /etc/zabbix/smartctl-devices.json
 #
-# 20200601 jsk
-# - zabbix 5.0 
+# 20200601 v2.0 jsk, stas630
+# - zabbix 5.0
 # - temperature macros
-#
 
-ZBX_CONFIG_AGENT="/etc/zabbix/zabbix_agentd.conf"
-DEV_LIST="/etc/zabbix/smartctl-devices.json"
+# Comment if not need log
 LOG="/var/log/zabbix/smartctl-disks.log"
 
+# Comment if not need static cciss,* devices
+DEV_LIST="/etc/zabbix/smartctl-devices.json"
+
+ZBX_CONFIG_AGENT="/etc/zabbix/zabbix_agentd.conf"
+
+# Monitoring martmontools fields
+INFO_FIELDS=";Model Family;Device Model;Serial Number;Firmware Version;User Capacity;Sector Size;Rotation Rate;"
+ATTR_FIELDS=";1;3;4;5;7;9;10;11;12;177;190;192;193;194;196;197;198;199;200;233;241;242;"
 
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -28,11 +36,11 @@ DEV_TYPE="$2"
 HOSTNAME="$3"
 
 ESC_DEV_TYPE="$2"
-echo $DEV_TYPE | grep ',' >/dev/null && ESC_DEV_TYPE="\"$DEV_TYPE\""
+echo $DEV_TYPE | grep -q ',' && ESC_DEV_TYPE="\"$DEV_TYPE\""
 
 if [ -z ${DEV_NAME} ]; then
-  if [ -f $DEV_LIST ]; then
-    cat $DEV_LIST
+  if [ ! -z ${DEV_LIST} -a -s ${DEV_LIST} ]; then
+    cat ${DEV_LIST}
     exit 0
   fi
   sudo /usr/sbin/smartctl --scan-open | awk 'BEGIN{print "{\"data\":["}{
@@ -49,8 +57,8 @@ fi
 TMPS=`mktemp -t zbx-smart.XXXXXXXXXXXXXXXXXXX`
 
 sudo /usr/sbin/smartctl -A -H -i -d ${DEV_TYPE} /dev/${DEV_NAME} | awk 'BEGIN{
-  INFO_FIELDS=";Model Family;Device Model;Serial Number;Firmware Version;User Capacity;Sector Size;Rotation Rate;"
-  ATTR_FIELDS=";1;3;4;5;7;9;10;11;12;177;190;192;193;194;196;197;198;199;200;233;241;242;"
+  INFO_FIELDS="'"${INFO_FIELDS}"'"
+  ATTR_FIELDS="'"${ATTR_FIELDS}"'"
 }
 function trim(s){
   sub(/^[ \t]+/,"",s)
@@ -69,7 +77,7 @@ function toattr(s){
   if(type=="info"){
     split($0,linearr,":")
     if(index(INFO_FIELDS,";"trim(linearr[1])";")){
-      print "'$HOSTNAME' smartctl.info['${DEV_NAME}','${ESC_DEV_TYPE}',"toattr(trim(linearr[1]))"] \""trim(linearr[2])"\"" >"'${TMPS}'"
+      print "'${HOSTNAME}' smartctl.info['${DEV_NAME}','${ESC_DEV_TYPE}',"toattr(trim(linearr[1]))"] \""trim(linearr[2])"\"" >"'${TMPS}'"
     }
     next
   }
@@ -82,10 +90,10 @@ function toattr(s){
   }
   if(type=="attr"){
     if(NF<10||!index(ATTR_FIELDS,";"$1";")) next
-    print "'$HOSTNAME' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",value] "$4 >"'${TMPS}'"
-    print "'$HOSTNAME' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",worst] "$5 >"'${TMPS}'"
-    print "'$HOSTNAME' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",thresh] "$6 >"'${TMPS}'"
-    print "'$HOSTNAME' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",raw_value] "$10 >"'${TMPS}'"
+    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",value] "$4 >"'${TMPS}'"
+    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",worst] "$5 >"'${TMPS}'"
+    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",thresh] "$6 >"'${TMPS}'"
+    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",raw_value] "$10 >"'${TMPS}'"
   }
 }'
 
