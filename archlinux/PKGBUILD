@@ -29,5 +29,5 @@ package() {
 	cp -r "zabbix_agentd.conf.d" "${pkgdir}/etc/zabbix"
 	cp -r "scripts" "${pkgdir}/etc/zabbix"
 
-	chmod 755 "${pkgdir}/etc/zabbix/scripts/smartctl-disks.sh"
+	chmod 755 "${pkgdir}/etc/zabbix/scripts/zabbix_smartctl.sh"
 }

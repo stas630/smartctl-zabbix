@@ -49,14 +49,14 @@ Make sure it works
 Data source script:
 
 ```
-$ sudo /etc/zabbix/scripts/smartctl-disks.sh
+$ sudo /etc/zabbix/scripts/zabbix_smartctl.sh
 {"data":[
 { "{#DEVNAME}":"sda", "{#DEVTYPE}":"sat" }
 ]}
 ```
 
 ```
-$ sudo /etc/zabbix/scripts/smartctl-disks.sh sda sat
+$ sudo /etc/zabbix/scripts/zabbix_smartctl sda sat
 PASSED
  smartctl.info[sda,sat,model_family] "Western Digital Blue"
  smartctl.info[sda,sat,device_model] "WDC WD5000AAKX-00ERMA0"
@@ -82,7 +82,7 @@ PASSED
 Access permissions:
 
 ```
-$ sudo -u zabbix-agent /etc/zabbix/scripts/smartctl-disks.sh
+$ sudo -u zabbix-agent /etc/zabbix/scripts/zabbix_smartctl.sh
 {"data":[
 { "{#DEVNAME}":"sda", "{#DEVTYPE}":"sat" }
 ]}
