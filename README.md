@@ -4,11 +4,11 @@ Template and script for monitoring HDD S.M.A.R.T data from Zabbix on Linux OS
 S.M.A.R.T. items description copied from Wikipedia (https://en.wikipedia.org/wiki/S.M.A.R.T.)
 
 
-Installation
+Installation for Ubuntu or other Linux
 ------------
 
-Install smartctl for Ubuntu or other Linux:
-      sudo apt install smartmontools zabbix-sender
+Install smartctl:
+sudo apt install smartmontools zabbix-sender
 
 Copy the scripts, zabbix_agentd.conf.d into /etc/zabbix/
 
