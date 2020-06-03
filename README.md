@@ -7,7 +7,7 @@ S.M.A.R.T. items description copied from Wikipedia (https://en.wikipedia.org/wik
 Installation
 ------------
 
-Install smartctl:
+Install smartctl for Ubuntu or other Linux:
       sudo apt install smartmontools zabbix-sender
 
 Copy the scripts, zabbix_agentd.conf.d into /etc/zabbix/
@@ -15,6 +15,14 @@ Copy the scripts, zabbix_agentd.conf.d into /etc/zabbix/
 Copy sudoers.d into /etc/
 
 Check arguments: Server, Hostname, ListenIP in zabbix_agentd.conf
+
+Arch Linux package
+------------------
+
+```
+$ cd archlinux
+$ makepkg -s
+```
 
 This template uses active checks, so you'll need to make some changes
 to `/etc/zabbix/zabbix_agentd.conf`. Edit them to match your configuration:

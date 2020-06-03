@@ -1,0 +1,33 @@
+pkgname=zabbix-smartctl
+pkgver=r3.86b80d3
+pkgrel=1
+pkgdesc="Template and script for monitoring HDD S.M.A.R.T data from Zabbix on Linux"
+arch=('any')
+url="https://github.com/m1kc/zabbix-smartctl"
+license=(GPL)
+depends=('zabbix-agent' 'smartmontools')
+optdepends=()
+source=("git+http://github.com/stas630/zabbix-smartctl.git#branch=master")
+sha256sums=('SKIP')
+
+pkgver() {
+	cd "$pkgname"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+	cd "$srcdir/zabbix-smartctl/"
+
+	sed -i 's/zabbix /zabbix-agent /g' sudoers.d/zabbix
+}
+
+package() {
+	cd "$srcdir/zabbix-smartctl/"
+
+	mkdir -p "${pkgdir}/etc/zabbix"
+	cp -r "sudoers.d" "${pkgdir}/etc"
+	cp -r "zabbix_agentd.conf.d" "${pkgdir}/etc/zabbix"
+	cp -r "scripts" "${pkgdir}/etc/zabbix"
+
+	chmod 755 "${pkgdir}/etc/zabbix/scripts/smartctl-disks.sh"
+}
