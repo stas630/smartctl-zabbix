@@ -58,25 +58,25 @@ $ sudo /etc/zabbix/scripts/smartctl-disks.sh
 ```
 $ sudo /etc/zabbix/scripts/smartctl-disks.sh sda sat
 PASSED
- smartctl.info[sda,model_family] "Western Digital Blue"
- smartctl.info[sda,device_model] "WDC WD5000AAKX-00ERMA0"
- smartctl.info[sda,serial_number] "WD-WCC2EJA56447"
- smartctl.info[sda,firmware_version] "15.01H15"
- smartctl.info[sda,user_capacity] "500,106,780,160 bytes [500 GB]"
- smartctl.info[sda,sector_size] "512 bytes logical/physical"
- smartctl.smart[sda,1,value] 200
- smartctl.smart[sda,1,worst] 200
- smartctl.smart[sda,1,thresh] 051
- smartctl.smart[sda,1,raw_value] 0
- smartctl.smart[sda,3,value] 139
- smartctl.smart[sda,3,worst] 137
- smartctl.smart[sda,3,thresh] 021
- smartctl.smart[sda,3,raw_value] 4050
+ smartctl.info[sda,sat,model_family] "Western Digital Blue"
+ smartctl.info[sda,sat,device_model] "WDC WD5000AAKX-00ERMA0"
+ smartctl.info[sda,sat,serial_number] "WD-WCC2EJA56447"
+ smartctl.info[sda,sat,firmware_version] "15.01H15"
+ smartctl.info[sda,sat,user_capacity] "500,106,780,160 bytes [500 GB]"
+ smartctl.info[sda,sat,sector_size] "512 bytes logical/physical"
+ smartctl.smart[sda,sat,1,value] 200
+ smartctl.smart[sda,sat,1,worst] 200
+ smartctl.smart[sda,sat,1,thresh] 051
+ smartctl.smart[sda,sat,1,raw_value] 0
+ smartctl.smart[sda,sat,3,value] 139
+ smartctl.smart[sda,sat,3,worst] 137
+ smartctl.smart[sda,sat,3,thresh] 021
+ smartctl.smart[sda,sat,3,raw_value] 4050
 ...
- smartctl.smart[sda,200,value] 200
- smartctl.smart[sda,200,worst] 200
- smartctl.smart[sda,200,thresh] 000
- smartctl.smart[sda,200,raw_value] 0
+ smartctl.smart[sda,sat,200,value] 200
+ smartctl.smart[sda,sat,200,worst] 200
+ smartctl.smart[sda,sat,200,thresh] 000
+ smartctl.smart[sda,sat,200,raw_value] 0
 ```
 
 Access permissions:
