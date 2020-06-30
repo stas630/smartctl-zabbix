@@ -13,7 +13,7 @@
 # - support for static cciss,* devices
 # - "static" device discovery from /etc/zabbix/smartctl-devices.json
 #
-# 20200601 v2.0 jsk, stas630
+# 20200630 v2.1 jsk, stas630
 # - zabbix 5.0
 # - temperature macros
 
@@ -34,9 +34,6 @@ export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DEV_NAME="$1"
 DEV_TYPE="$2"
 HOSTNAME="$3"
-
-ESC_DEV_TYPE="$2"
-echo $DEV_TYPE | grep -q ',' && ESC_DEV_TYPE="\"$DEV_TYPE\""
 
 if [ -z ${DEV_NAME} ]; then
   if [ ! -z ${DEV_LIST} -a -s ${DEV_LIST} ]; then
@@ -59,6 +56,11 @@ TMPS=`mktemp -t zbx-smart.XXXXXXXXXXXXXXXXXXX`
 sudo /usr/sbin/smartctl -A -H -i -d ${DEV_TYPE} /dev/${DEV_NAME} | awk 'BEGIN{
   INFO_FIELDS="'"${INFO_FIELDS}"'"
   ATTR_FIELDS="'"${ATTR_FIELDS}"'"
+  hostname="'"${HOSTNAME}"'"
+  devname="'"${DEV_NAME}"'"
+  devtype="'"${DEV_TYPE}"'"
+  if (devtype ~/,/){devtype="\""devtype"\""}
+  output_file="'"${TMPS}"'"
 }
 function trim(s){
   sub(/^[ \t]+/,"",s)
@@ -77,7 +79,7 @@ function toattr(s){
   if(type=="info"){
     split($0,linearr,":")
     if(index(INFO_FIELDS,";"trim(linearr[1])";")){
-      print "'${HOSTNAME}' smartctl.info['${DEV_NAME}','${ESC_DEV_TYPE}',"toattr(trim(linearr[1]))"] \""trim(linearr[2])"\"" >"'${TMPS}'"
+      print hostname" smartctl.info["devname","devtype","toattr(trim(linearr[1]))"] \""trim(linearr[2])"\"" >output_file
     }
     next
   }
@@ -90,10 +92,10 @@ function toattr(s){
   }
   if(type=="attr"){
     if(NF<10||!index(ATTR_FIELDS,";"$1";")) next
-    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",value] "$4 >"'${TMPS}'"
-    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",worst] "$5 >"'${TMPS}'"
-    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",thresh] "$6 >"'${TMPS}'"
-    print "'${HOSTNAME}' smartctl.smart['${DEV_NAME}','${ESC_DEV_TYPE}',"$1",raw_value] "$10 >"'${TMPS}'"
+    print hostname" smartctl.smart["devname","devtype","$1",value] "$4 >output_file
+    print hostname" smartctl.smart["devname","devtype","$1",worst] "$5 >output_file
+    print hostname" smartctl.smart["devname","devtype","$1",thresh] "$6 >output_file
+    print hostname" smartctl.smart["devname","devtype","$1",raw_value] "$10 >output_file
   }
 }'
 
@@ -107,5 +109,4 @@ elif [ -s ${TMPS} ]; then
     cat ${TMPS} >> ${LOG}
   fi
 fi
-
 rm -f ${TMPS}
