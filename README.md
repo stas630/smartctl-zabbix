@@ -51,7 +51,7 @@ Data source script:
 ```
 $ sudo /etc/zabbix/scripts/zabbix_smartctl.sh
 {"data":[
-{ "{#DEVNAME}":"sda", "{#DEVTYPE}":"sat" }
+{ "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"sat" }
 ]}
 ```
 
@@ -84,7 +84,17 @@ Access permissions:
 ```
 $ sudo -u zabbix-agent /etc/zabbix/scripts/zabbix_smartctl.sh
 {"data":[
-{ "{#DEVNAME}":"sda", "{#DEVTYPE}":"sat" }
+{ "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"sat" }
+]}
+```
+if ```/usr/sbin/smartctl --scan-open``` list empty output, then create /etc/zabbix/smartctl-devices.json
+
+```
+{"data":[
+{ "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"cciss,0" }
+,{ "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"cciss,1" }
+,{ "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"cciss,2" }
+,{ "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"cciss,3" }
 ]}
 ```
 
