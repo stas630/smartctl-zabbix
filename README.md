@@ -87,7 +87,10 @@ $ sudo -u zabbix-agent /etc/zabbix/scripts/zabbix_smartctl.sh
 { "{#DEVNAME}":"sda", "{#VISNAME}":"sda", "{#DEVTYPE}":"sat" }
 ]}
 ```
+
 if ```/usr/sbin/smartctl --scan-open``` list empty output, then create /etc/zabbix/smartctl-devices.json
+
+Example for HP SmartArray (cciss) hardware RAID:
 
 ```
 {"data":[
