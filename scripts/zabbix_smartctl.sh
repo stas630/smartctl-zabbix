@@ -65,6 +65,7 @@ sudo /usr/sbin/smartctl -A -H -i -d ${DEV_TYPE} /dev/${DEV_NAME} | awk 'BEGIN{
 function trim(s){
   sub(/^[ \t]+/,"",s)
   sub(/[ \t]+$/,"",s)
+  gsub("\"","\\\"",s)
   return s;
 }
 function toattr(s){
